@@ -1,11 +1,13 @@
-import express from "express";
+import express, { json } from "express";
+
+import { routes } from "./routes";
 
 const app = express();
 
-app.get("/", (request, response) => {
-  return response.json({
-    message: "Hello world!"
-  })
-})
+app.use(json());
+app.use(routes);
 
-app.listen(3000, () => console.log("Server is running on http://localhost:3000"));
+app.listen(3000, () => {
+  console.log("");
+  console.log("Server is running on http://localhost:3000")
+});
