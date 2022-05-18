@@ -3,31 +3,31 @@ import { sign } from "jsonwebtoken";
 
 import { prisma } from "../../../database/prismaClient";
 
-interface IAuthenticateClient {
+interface IAuthenticateDeliveryman {
   username: string;
   password: string;
 }
 
-export class AuthenticateClientUseCase {
-  async execute({ username, password }: IAuthenticateClient) {
-    const client = await prisma.clients.findFirst({
+export class AuthenticateDeliverymanUseCase {
+  async execute({ username, password }: IAuthenticateDeliveryman) {
+    const deliveryman = await prisma.deliveryman.findFirst({
       where: {
         username
       }
     });
 
-    if (!client) {
+    if (!deliveryman) {
       throw new Error("Username or password is not correct");
     }
 
-    const passwordMatch = await compare(password, client.password);
+    const passwordMatch = await compare(password, deliveryman.password);
 
     if (!passwordMatch) {
       throw new Error("Username or password is not correct");
     }
 
-    const token = sign({ username }, process.env.JWT_SECRET_CLIENT as string, {
-      subject: client.id,
+    const token = sign({ username }, process.env.JWT_SECRET_DELIVERYMAN as string, {
+      subject: deliveryman.id,
       expiresIn: process.env.JWT_EXPIRES
     });
 
